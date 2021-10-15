@@ -19,17 +19,17 @@ rutasProducto.route('/productos').get((req, res) => {
     queryAllProducts(genericCallback(res));
 });
 
-rutasProducto.route('/productos/nuevo').post((req, res) => {
+rutasProducto.route('/productos').post((req, res) => {
     crearProducto(req.body, genericCallback(res));
 });
 
-rutasProducto.route('/productos/editar').patch((req, res) => {
-   editarProducto(req.body, genericCallback(res));
+rutasProducto.route('/productos/:id').patch((req, res) => {
+   editarProducto(req.params.id, req.body, genericCallback(res));
 
 })
 
-rutasProducto.route('/productos/eliminar').delete((req, res) => {
-    eliminarProducto(req.body.id, genericCallback(res));
+rutasProducto.route('/productos/:id').delete((req, res) => {
+    eliminarProducto(req.params.id, genericCallback(res));
 })
 
 export default rutasProducto;

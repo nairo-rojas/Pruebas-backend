@@ -24,9 +24,8 @@ const crearProducto = async ( datoProducto, callback)=>{
     }
 };
 
-const editarProducto = async(edicion, callback)=>{
-    const filtroVehiculo = { _id: new ObjectId(edicion.id) };
-    delete edicion.id;
+const editarProducto = async(id, edicion, callback)=>{
+    const filtroVehiculo = { _id: new ObjectId(id) };
     const operacion = {
         $set: edicion,
     };
