@@ -1,5 +1,5 @@
 import Express from 'express';
-import { queryAllProducts, crearProducto, editarProducto } from '../../controllers/productos/controller.js';
+import { queryAllProducts, crearProducto, editarProducto, eliminarProducto } from '../../controllers/productos/controller.js';
 
 
 
@@ -29,20 +29,7 @@ rutasProducto.route('/productos/editar').patch((req, res) => {
 })
 
 rutasProducto.route('/productos/eliminar').delete((req, res) => {
-    const eliminar = req.body;
-    const filtroVehiculo = { _id: new ObjectId(eliminar.id) };
-    const baseDeDatos = getDB();
-    baseDeDatos.collection('producto').deleteOne(filtroVehiculo, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.sendStatus(500);
-        } else {
-            console.log(result);
-            res.sendStatus(200);
-
-
-        }
-    })
+    eliminarProducto(req.body.id, genericCallback(res));
 })
 
 export default rutasProducto;

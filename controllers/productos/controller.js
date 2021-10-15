@@ -37,4 +37,10 @@ const editarProducto = async(edicion, callback)=>{
         { upsert: true, returnOriginal: true }, callback);
 
 }
-export { queryAllProducts, crearProducto, editarProducto };
+
+const eliminarProducto = async (id, callback)=>{
+   const filtroVehiculo = { _id: new ObjectId(id) };
+    const baseDeDatos = getDB();
+    await baseDeDatos.collection('producto').deleteOne(filtroVehiculo, callback);
+}
+export { queryAllProducts, crearProducto, editarProducto, eliminarProducto };
