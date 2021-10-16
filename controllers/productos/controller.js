@@ -11,8 +11,8 @@ const getAllProducts = async (callback) => {
 const crearProducto = async ( datoProducto, callback)=>{
     if (  
         Object.keys(datoProducto).includes('name') &&
-        Object.keys(datoProducto).includes('type') &&
-        Object.keys(datoProducto).includes('amount')) {
+        Object.keys(datoProducto).includes('presentation') &&
+        Object.keys(datoProducto).includes('package')) {
         const baseDeDatos = getDB();
         //implementar codigo par conectarse a la db
         await baseDeDatos.collection('producto').insertOne(datoProducto, callback)
