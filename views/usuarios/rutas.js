@@ -1,5 +1,5 @@
 import Express from 'express';
-import { getAllUser, crearUsuario, editarUsuario, eliminarUsuario } from '../../controllers/usuarios/controller.js';
+import { getAllUsers, crearUsuario, editarUsuario, eliminarUsuario } from '../../controllers/usuarios/controller.js';
 
 
 const rutasUsuario = Express.Router();
@@ -13,7 +13,7 @@ const genericCallback = (res) => (err, result) => {
 };
 
 rutasUsuario.route('/usuarios').get((req, res) => {
-  getAllUser(genericCallback(res));
+  getAllUsers(genericCallback(res));
 });
 
 rutasUsuario.route('/usuarios').post((req, res) => {
