@@ -1,0 +1,9 @@
+{
+  "name": "back-ventas",
+  "version": "1.0.0",
+  "description": "server-ventas",
+  "main": "index.js",
+  "repository": "https://github.com/nairo-rojas/Pruebas-backend.git",
+  "author": "nairo-rojas <nairo.rojas@gmail.com>",
+  "license": "MIT"
+}
