@@ -1,29 +1,20 @@
 import Express from "express";
-import { MongoClient, ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
+import { conectarDB, getDB } from "./db/db.js";
 import dotenv from 'dotenv';
 import Cors from 'cors';
 
 
 dotenv.config({path: './.env'});
 
-const stringConexion = process.env.DATABASE_URL;
-
-const client = new MongoClient(stringConexion, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
-
-
-
 const app = Express();
 app.use(Express.json());
 app.use(Cors());
 
-
 app.get('/productos', (req,res)=>{
     console.log("Alguien hizo get en la ruta /productos");
-    baseDeDatos
-        .collection('producto')
+    const baseDeDatos = getDB();
+    baseDeDatos.collection('producto')
         .find({})
         .limit(50)
         .toArray((err, result)=>{
@@ -46,7 +37,8 @@ app.post('/productos/nuevo',(req, res)=>{
         Object.keys(datosProducto).includes('presentation') &&
         Object.keys(datosProducto).includes('price')) 
         {
-             //implementar codigo para crear el producto en la db
+            //implementar codigo para crear el producto en la db
+            const baseDeDatos = getDB();
             baseDeDatos.collection('producto').insertOne(datosProducto, (err, result)=>{
                 if (err) {
                     console.error(err);
@@ -68,8 +60,9 @@ app.patch('/productos/editar', (req, res)=>{
     const filtroProducto = {_id: new ObjectId(edicion.id)};
     delete edicion.id;
     const operacion = {
-        $set:edicion,
+        $set: edicion,
     };
+    const baseDeDatos = getDB();
     baseDeDatos
         .collection('producto')
         .findOneAndUpdate(
@@ -89,6 +82,7 @@ app.patch('/productos/editar', (req, res)=>{
 
 app.delete('/productos/eliminar', (req, res)=>{
 const filtroProducto = {_id: new ObjectId(req.body.id)};
+const baseDeDatos = getDB();
 baseDeDatos.collection('producto').deleteOne(filtroProducto, (err, result)=>{
     if (err) {
         console.error(err);
@@ -96,23 +90,13 @@ baseDeDatos.collection('producto').deleteOne(filtroProducto, (err, result)=>{
     } else {
         res.sendStatus(200);
     }
-})
+});
 });
 
-let baseDeDatos;
-
 const main = ()=>{
-    client.connect((err, db)=>{
-        if (err) {
-            console.error("error conectando a la base de datos")
-        } 
-        baseDeDatos = db.db('Productos');
-        console.log("Conexión existosa a la baseDeDatos")
-        return app.listen(process.env.PORT, ()=>{
-            console.log(`Escuchando en el puerto ${process.env.PORT}`);
-        });
+    return app.listen(process.env.PORT, ()=>{
+        console.log(`Escuchando en el puerto ${process.env.PORT}`);
     });
+};
 
-}
-
-main();
+conectarDB(main);
