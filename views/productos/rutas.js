@@ -1,49 +1,25 @@
 import Express from 'express';
+import { queryAllProducts, crearProducto } from '../../controllers/productos/controller.js';
 import { getDB } from "../../db/db.js";
 
 const rutasProductos = Express.Router();
 
+const genericCallback = (res)=>(err, result)=>{
+        if (err) {
+                res.status(500).send("error consultando los productos")
+            } else {
+                res.json(result);
+            }
+        };
+
 rutasProductos.route('/productos').get((req,res)=>{
     console.log("Alguien hizo get en la ruta /productos");
-    const baseDeDatos = getDB();
-    baseDeDatos.collection('producto')
-        .find({})
-        .limit(50)
-        .toArray((err, result)=>{
-        if (err) {
-            res.status(500).send("error consultando los productos")
-        } else {
-            res.json(result);
-        }
-    });
+    queryAllProducts(genericCallback(res));
    
 });
 
 rutasProductos.route('/productos/nuevo').post((req, res)=>{
-    console.log(req);
-    const datosProducto = req.body;
-    console.log("Llaves:", Object.keys(datosProducto));
-    if (
-        Object.keys(datosProducto).includes('name') &&
-        Object.keys(datosProducto).includes('package') &&
-        Object.keys(datosProducto).includes('presentation') &&
-        Object.keys(datosProducto).includes('price')) 
-        {
-            //implementar codigo para crear el producto en la db
-            const baseDeDatos = getDB();
-            baseDeDatos.collection('producto').insertOne(datosProducto, (err, result)=>{
-                if (err) {
-                    console.error(err);
-                    res.sendStatus(500);
-                } else {
-                    console.log(result)
-                    res.status(200);
-                }
-            });
-             res.sendStatus(200)
-    } else {
-            res.sendStatus(500)
-    }
+    crearProducto(req.body, genericCallback(res));
 });
 
 rutasProductos.route('/productos/editar').patch((req, res)=>{
