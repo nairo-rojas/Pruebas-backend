@@ -17,16 +17,16 @@ rutasProductos.route('/productos').get((req,res)=>{
    
 });
 
-rutasProductos.route('/productos/nuevo').post((req, res)=>{
+rutasProductos.route('/productos').post((req, res)=>{
     crearProducto(req.body, genericCallback(res));
 });
 
-rutasProductos.route('/productos/editar').patch((req, res)=>{
-    editarProducto(req.body, genericCallback(res));
+rutasProductos.route('/productos/:id').patch((req, res)=>{
+    editarProducto(req.params.id, req.body, genericCallback(res));
 });
 
-rutasProductos.route('/productos/eliminar').delete((req, res)=>{
-    elimiarProducto(req.body.id, genericCallback(res))
+rutasProductos.route('/productos/:id').delete((req, res)=>{
+    elimiarProducto(req.params.id, genericCallback(res))
 });
 
 export default rutasProductos;
