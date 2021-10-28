@@ -4,6 +4,7 @@ import { ObjectId } from "mongodb";
 const queryAllProducts = async (callback) => {
     const baseDeDatos = getDB();
     await baseDeDatos.collection('producto')
+        //.find({name: "Pera"})
         .find({})
         .limit(50)
         .toArray(callback);
@@ -20,6 +21,12 @@ const crearProducto = async (datosProducto, callback) => {
     } else {
         return "error";
     }
+};
+
+const consultarProducto = async(id, callback)=>{
+    const baseDeDatos = getDB();
+    await baseDeDatos.collection('producto')
+        .findOne({_id: new ObjectId(id)}, callback);
 };
 
 const editarProducto = async (id, edicion, callback) => {
@@ -42,4 +49,4 @@ const elimiarProducto = async(id, callback)=>{
     await baseDeDatos.collection('producto').deleteOne(filtroProducto, callback);
 };
 
-export { queryAllProducts, crearProducto, editarProducto, elimiarProducto };
+export { queryAllProducts, crearProducto, consultarProducto, editarProducto, elimiarProducto };

@@ -4,6 +4,8 @@ import { conectarDB } from "./db/db.js";
 import dotenv from 'dotenv';
 import Cors from 'cors';
 import rutasProductos from "./views/productos/rutas.js";
+import rutasUsuarios from "./views/usuarios/rutas.js";
+import rutasVentas from "./views/ventas/rutas.js";
 
 
 dotenv.config({path: './.env'});
@@ -13,6 +15,8 @@ const app = Express();
 app.use(Express.json());
 app.use(Cors());
 app.use(rutasProductos);
+app.use(rutasUsuarios);
+app.use(rutasVentas);
 
 
 const main = ()=>{
