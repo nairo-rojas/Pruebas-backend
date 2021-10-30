@@ -10,6 +10,7 @@ import autorizacionEstadoUsuario from "./middleware/autorizacionEstadoUsuario.js
 
 
 dotenv.config({path: './.env'});
+const port = process.env.PORT || 5000;
 
 const app = Express();
 
@@ -24,8 +25,8 @@ app.use(rutasVentas);
 
 
 const main = ()=>{
-    return app.listen(process.env.PORT, ()=>{
-        console.log(`Escuchando en el puerto ${process.env.PORT}`);
+    return app.listen(port, ()=>{
+        console.log(`Escuchando en el puerto ${port}`);
     });
 };
 
