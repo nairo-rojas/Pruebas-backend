@@ -1,47 +1,53 @@
 
-import { ObjectId} from 'mongodb';
-import { getDB } from '../../db/db.js';
+import { getDB } from "../../db/db.js";
+import { ObjectId } from "mongodb";
 
-
-const getAllProducts = async (callback) => {
+const queryAllProducts = async (callback) => {
     const baseDeDatos = getDB();
-    await baseDeDatos.collection('producto').find({}).limit(50).toArray(callback);
+    await baseDeDatos.collection('producto')
+        //.find({name: "Pera"})
+        .find({})
+        .limit(50)
+        .toArray(callback);
 };
 
-const crearProducto = async ( datoProducto, callback)=>{
-    if (  
-        Object.keys(datoProducto).includes('name') &&
-        Object.keys(datoProducto).includes('presentation') &&
-        Object.keys(datoProducto).includes('package')) {
+const crearProducto = async (datosProducto, callback) => {
+    if (
+        Object.keys(datosProducto).includes('name') &&
+        Object.keys(datosProducto).includes('package') &&
+        Object.keys(datosProducto).includes('presentation') &&
+        Object.keys(datosProducto).includes('price')) {
         const baseDeDatos = getDB();
-        //implementar codigo par conectarse a la db
-        await baseDeDatos.collection('producto').insertOne(datoProducto, callback)
-            } else {
-                return 'error';
+        await baseDeDatos.collection('producto').insertOne(datosProducto, callback);
+    } else {
+        return "error";
     }
 };
 
-// const consultarProducto = async(id, callback)=>{
-//     const baseDeDatos = getDB();
-//     await baseDeDatos.collection('producto').findOne({ _id: new ObjectId(id) }, callback);
-// }
+const consultarProducto = async(id, callback)=>{
+    const baseDeDatos = getDB();
+    await baseDeDatos.collection('producto')
+        .findOne({_id: new ObjectId(id)}, callback);
+};
 
-const editarProducto = async(id, edicion, callback)=>{
-    const filtroUsuario = { _id: new ObjectId(id) };
+const editarProducto = async (id, edicion, callback) => {
+    const filtroProducto = { _id: new ObjectId(id) };
     const operacion = {
         $set: edicion,
     };
     const baseDeDatos = getDB();
     await baseDeDatos
         .collection('producto')
-        .findOneAndUpdate(filtroUsuario, operacion,
-        { upsert: true, returnOriginal: true }, callback);
+        .findOneAndUpdate(
+            filtroProducto,
+            operacion,
+            { upsert: true, returnOriginal: true },callback)
+};
 
-}
-
-const eliminarProducto = async (id, callback)=>{
-   const filtroUsuario = { _id: new ObjectId(id) };
+const elimiarProducto = async(id, callback)=>{
+    const filtroProducto = {_id: new ObjectId(id)};
     const baseDeDatos = getDB();
-    await baseDeDatos.collection('producto').deleteOne(filtroUsuario, callback);
-}
-export { getAllProducts, crearProducto, editarProducto, eliminarProducto };
+    await baseDeDatos.collection('producto').deleteOne(filtroProducto, callback);
+};
+
+export { queryAllProducts, crearProducto, consultarProducto, editarProducto, elimiarProducto };
