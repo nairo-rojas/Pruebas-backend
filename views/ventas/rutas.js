@@ -1,31 +1,38 @@
 import Express from 'express';
-import { crearVenta, eliminarVenta, editarVenta, getAllSales,} from '../../controllers/ventas/controller.js';
+import { queryAllSales, crearVenta, editarVenta, elimiarVenta, consultarVenta } from '../../controllers/ventas/controller.js';
 
-const rutasUsuario = Express.Router();
+const rutasVentas = Express.Router();
 
-const genericCallback = (res) => (err, result) => {
-  if (err) {
-    res.status(500).send(err);
-  } else {
-    res.json(result);
-  }
-};
+const genericCallback = (res)=>(err, result)=>{
+        if (err) {
+                res.status(500).send("error consultando los ventas")
+            } else {
+                res.json(result);
+            }
+        };
 
-rutasUsuario.route('/ventas').get((req, res) => {
-    getAllSales(genericCallback(res));
+rutasVentas.route('/ventas').get((req,res)=>{
+    console.log("Alguien hizo get en la ruta /ventas");
+    queryAllSales(genericCallback(res));
+   
 });
 
-rutasUsuario.route('/ventas').post((req, res) => {
-  crearVenta(req.body, genericCallback(res));
-  
+rutasVentas.route('/ventas').post((req, res)=>{
+    crearVenta(req.body, genericCallback(res));
 });
 
-rutasUsuario.route('/ventas/:id').patch((req, res) => {
-  editarVenta(req.params.id, req.body, genericCallback(res));
+rutasVentas.route('/ventas/:id').get((req,res)=>{
+    console.log("Alguien hizo get en la ruta /ventas");
+    consultarVenta(req.params.id, genericCallback(res));
+   
 });
 
-rutasUsuario.route('/ventas/:id').delete((req, res) => {
-  eliminarVenta(req.params.id, genericCallback(res));
+rutasVentas.route('/ventas/:id').patch((req, res)=>{
+    editarVenta(req.params.id, req.body, genericCallback(res));
 });
 
-export default rutasUsuario;
+rutasVentas.route('/ventas/:id').delete((req, res)=>{
+    elimiarVenta(req.params.id, genericCallback(res))
+});
+
+export default rutasVentas;
