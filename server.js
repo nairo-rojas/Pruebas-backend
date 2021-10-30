@@ -1,5 +1,4 @@
 import Express from "express";
-import { ObjectId } from "mongodb";
 import { conectarDB } from "./db/db.js";
 import dotenv from 'dotenv';
 import Cors from 'cors';
